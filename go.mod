@@ -1,3 +1,3 @@
-module github.com/JB-hb/Todo_Search.git
+module todo
 
 go 1.23.6

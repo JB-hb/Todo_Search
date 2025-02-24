@@ -1,12 +1,20 @@
 package main
 
-import "fmt"
-import "os"
-import "github.com/JB-hb/Todo_Search/List/list"
+import (
+	"fmt"
+	"os"
+
+	"todo/List"
+)
 
 func main(){
 
-	var path string;
+	var path string
+	var lst list.List_type
+
+	if(lst.Is_empty() == true){
+		fmt.Println("struct")
+	}
 	
 	switch{
 	case len(os.Args) == 2:
