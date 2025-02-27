@@ -2,7 +2,7 @@ package search
 
 import(
 	"os"
-	"buffio"
+	"bufio"
 	"path/filepath"
 	"fmt"
 	"strings"
@@ -10,27 +10,40 @@ import(
 	"todo/List"
 )
 
-func Find_todos(path string, list *list.List_type){
+//todo : search
+
+func Find_todos(path string, listp *list.List_type){
 	files, err := os.ReadDir(path)
-	for i, file := range files{
+	if (err != nil){
+		fmt.Printf("error reading: %s\n", path)	
+	}
+	for _, file := range files{
 		if file.IsDir(){
-			new_path string := filepath.Join(path, file.Name) 				
-			Find_todos(new_path, list)
+			new_path := filepath.Join(path, file.Name()) 				
+			Find_todos(new_path, listp)
 			continue
 		}else{
-			value, errR := os.Open(filepath.Join(path, file.Name))
+			value, errR := os.Open(filepath.Join(path, file.Name()))
 			if(errR != nil){
-				fmt.Printf("Error opening file %s\n", filepath.Join(path, file.Name))
+				fmt.Printf("Error opening file %s\n", filepath.Join(path, file.Name()))
 				continue
 			}
-			scanner := buffio.NewScanner(value)
-			cont int := 0
-			for scanner.Scan(){
+			reader := bufio.NewReader(value)
+			cont := 0
+			for{
+
+				line, errL := reader.ReadString('\n')
+				if errL != nil{
+					break
+				}
 				cont += 1
-				line := strings.ToLower(scanner.Text())
-				if(strings.Contains(line, "todo")){
-					node list.Node_type := {Todo: Line, Path: filepath.Join(path, file.Name), Line: cont}
-					list.Push_node(node)
+				if(len(line) > 1 && line[0] == '/' && line[1] == '/'){
+					if (strings.Contains(line, "todo")){
+						line,_ = strings.CutPrefix(line, "//")
+						line = line[:len(line) - 1]
+						node := list.Node_type {Todo: line, Path: filepath.Join(path, file.Name()), Line: cont}
+						listp.Push_node(&node)
+					}
 				}
 			}
 		}

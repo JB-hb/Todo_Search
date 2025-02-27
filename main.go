@@ -1,29 +1,20 @@
 package main
 
 import (
-	//"fmt"
-	//"os"
+	"os"
+	"fmt"
 
 	"todo/List"
+	"todo/Search"
+
 )
+
 
 func main(){
 
 	var lst list.List_type
-	var code int
-	var err error
-	node := list.Node_type{Path: "path/one", Line: 23, Todo: "test-node"}
+	var path string
 
-	lst.Push_node(&node)
-	lst.Print_list("path", nil)
-
-	if(err == nil && code == 0){
-		return
-	}
-
-
-
-	/*
 	switch{
 	case len(os.Args) == 2:
 		path = os.Args[1]
@@ -33,8 +24,11 @@ func main(){
 	default:
 		fmt.Println("Insert path of the project")
 		fmt.Scanln(&path)
-		fmt.Printf("the path is %s\n", path)
 	}
-	*/
+
+	search.Find_todos(path, &lst)
+
+	lst.Print_list(path, nil, 0)
+
 
 }

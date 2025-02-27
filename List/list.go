@@ -33,6 +33,10 @@ func (node Node_type) Get_values() (string, string, int){
 	return node.Path, node.Todo, node.Line
 }
 
+func (node Node_type) Get_path() (string){
+	return node.Path
+}
+
 //list struct and methods
 
 type List_type struct{
@@ -127,7 +131,7 @@ func (list *List_type) Delete_node_index(index int, pos int, node *Node_type, pr
 	return list.Delete_node_index(index, pos + 1, node.Get_next(), node)
 }
 
-func (list *List_type) Print_list(base_path string, node *Node_type) (int, error){
+func (list *List_type) Print_list(base_path string, node *Node_type, cont int) (int, error){
 	if(list.Is_empty() == true){
 		fmt.Println("aja")
 		return 1, errors.New("the list is empty")
@@ -139,10 +143,10 @@ func (list *List_type) Print_list(base_path string, node *Node_type) (int, error
 		path, todo, line := list.Head.Get_values() 
 		new_path, found := strings.CutPrefix(path, base_path)
 		if(found == true){
-			fmt.Printf("%-40s|%-40s|%-5d\n", todo, new_path, line)
+			fmt.Printf("%-40s|%-40s|%-5d(%d)\n", todo, new_path, line,cont)
 		}
 		if(list.Head.Has_next() == true){
-			return list.Print_list(base_path, list.Head.Get_next())
+			return list.Print_list(base_path, list.Head.Get_next(), cont+1)
 		}
 		return 0, nil
 	}
@@ -150,11 +154,11 @@ func (list *List_type) Print_list(base_path string, node *Node_type) (int, error
 	path, todo, line := node.Get_values() 
 	new_path, found := strings.CutPrefix(path, base_path)
 	if(found == true){
-		fmt.Printf("%-40s|%-40s|%-5d\n", todo, new_path, line)
+		fmt.Printf("%-40s|%-40s|%-5d(%d)\n", todo, new_path, line,cont)
 	}
 
 	if((*node).Has_next() == true){
-		return list.Print_list(base_path, list.Head.Get_next())
+		return list.Print_list(base_path, list.Head.Get_next(),cont+1)
 	}
 
 	return 0, nil
